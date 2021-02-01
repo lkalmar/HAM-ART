@@ -1,0 +1,44 @@
+# This file contains the paths to programs used by the HAM-ART pipeline
+# The pipeline only reads in lines without starting #
+#
+# Each software  has an internal identifier (first column)
+# a recommended number of CPUs / threads and/or memory to use (second column)
+# and a path to the executable (third colum)
+#
+# Please don't change the internal identifier!
+# If you have the software in your path, leave the executable name in the third column
+# If the software is not in your path, please provide the full path to the executable
+# Please change the number of CPUs / threads / memory if you don't have the required amount available
+#
+# The pipeline was optimised on a system with maximum of 32 CPU cores.
+# If you have more CPU cores / threads available, you may increase the performance of those
+# applications that have a reccomended CPU cores set to 32
+#
+#
+# path to clupify.sh in bbmap package (second column sets the memory to be used in gigabytes)
+CLUMPIFY 90 clumpify.sh
+# path to the bowtie2 executable (second column sets the number of threads to be used)
+BOWTIE2 16 bowtie2
+# path to the flash (Fast Length Adjustment of SHort reads) executable, second column sets the number of threads to be used
+FLASH 6 flash
+# path to metaspades.py script (Spades software package),
+# second column sets the number of CPUs and the amount of memory (in GB) to be used (separated by comma)
+METASPADES 32,380 metaspades.py
+# path to bowtie2-build for building database (running on default settings)
+BOWTIE2-B default bowtie2-build
+# path to the abricate executable (second column sets the number of threads to use in BLAST)
+ABRICATE 16 abricate
+# path to samtools software (second collumn sets the number of threads to be used)
+SAMTOOLS 16 samtools
+# path to louvain software folder (please provide the full path to the folder with executables convert, hierarchy, louvain, etc. here)
+LOUVAIN default louvain-generic/
+# path to makeblastdb executable
+MAKEBLDB default makeblastdb
+# path to blastn executable
+BLASTN 2 blastn
+# path to mash (Fast genome and metagenome distance estimation using MinHash) software, second column sets the number of threads to be used
+MASH default mash
+#path to GTDBTK software executable (second column sets the CPU threads to be used)
+GTDBTK 2 gtdbtk
+#path to GTDBTK database folder (with the genome fasta files in it)
+GTDBF default GTDB/release89/fastani/database/
