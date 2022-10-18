@@ -1041,7 +1041,7 @@ if ($step eq 'clade_refinement'){
 	# clade refinement 2
 	$fd = $of;
 	$prj_name = $prjcat;
-	$clade_list = @prj_ids;
+	#$clade_list = @prj_ids;
 	@fl = split(/\//, $ENV{'PWD'});
 	for $c (@arr){
 		$target{$c} = 1;
@@ -1454,7 +1454,7 @@ if ($step eq 'clade_refinement'){
 
 
 
-	$fd = resfd;
+	$fd = $resfd;
 	$thr = 250000;
 
 	if ($fd !~ /\/$/){
@@ -2320,11 +2320,12 @@ if ($step eq 'clade_refinement'){
 
 sub parseIDs{
 	my $str = $_[0];
+	my @arr = ();
 	if ($str =~ /\,/){
-		my @arr = split(/\,/, $str);
+		@arr = split(/\,/, $str);
 	}
 	else{
-		my @arr = ($str);
+		@arr = ($str);
 	}
 	return @arr;
 }
@@ -2437,7 +2438,7 @@ sub median{
 }
 
 sub GetLastTaxa{
-	my $txstr = @_[0];
+	my $txstr = $_[0];
 	my %taxdef = ("d" => "Domain", "p" => "Phylum", "c" => "Class", "o" => "Order", "f" => "Family", "g" => "Genus", "s" => "Species");
 	my @f = split(';', $txstr);
 	my @retarr = ();
