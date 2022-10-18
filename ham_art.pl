@@ -47,6 +47,12 @@ if ($step eq 'initialise'){
 	        }
 	    }
 	    close(F);
+	    @mandatory_params = ("PRJID", "PRJF", "PRJH", "METF1", "METF2", "HICF1", "HICF2");
+	    for $p (@mandatory_params){
+	    	if (!exists($param{$p})){
+			die "Mandatory parameter ".$p." is missing from the project description file!\n";
+		}
+	    }
 	    #Project id check
 	    if (exists($old_ids{$param{'PRJID'}})){
 	        die "The project ID (".$param{'PRJID'}.") has already been used before or the project is already initiated, please use a different ID\n";
@@ -74,32 +80,32 @@ if ($step eq 'initialise'){
 	    }
 
 	    #Input files check
-	    if (-f "../raw_seq_data/".$param{'PRJF'}."/".$param{'METPRE'}.".r_1.fq.gz"){
-	        print STDERR "Metagenomics file 1 (raw_seq_data/".$param{'PRJF'}."/".$param{'METPRE'}.".r_1.fq.gz) was found --> VALID\n";
+	    if (-f "../raw_seq_data/".$param{'PRJF'}."/".$param{'METF1'}){
+	        print STDERR "Metagenomics file 1 (raw_seq_data/".$param{'PRJF'}."/".$param{'METF1'}.") was found --> VALID\n";
 	    }
 	    else{
-	        die "Metagenomics file 1 (raw_seq_data/".$param{'PRJF'}."/".$param{'METPRE'}.".r_1.fq.gz) does not exist, please check the METPRE parameter in the project definition file\n";
+	        die "Metagenomics file 1 (raw_seq_data/".$param{'PRJF'}."/".$param{'METF1'}.") does not exist, please check the METF1 parameter in the project definition file\n";
 	    }
-	    if (-f "../raw_seq_data/".$param{'PRJF'}."/".$param{'METPRE'}.".r_2.fq.gz"){
-	        print STDERR "Metagenomics file 2 (raw_seq_data/".$param{'PRJF'}."/".$param{'METPRE'}.".r_2.fq.gz) was found --> VALID\n";
+	    if (-f "../raw_seq_data/".$param{'PRJF'}."/".$param{'METF2'}){
+	        print STDERR "Metagenomics file 2 (raw_seq_data/".$param{'PRJF'}."/".$param{'METF2'}.") was found --> VALID\n";
 	    }
 	    else{
-	        die "Metagenomics file 2 (raw_seq_data/".$param{'PRJF'}."/".$param{'METPRE'}.".r_2.fq.gz) does not exist, please check the METPRE parameter in the project definition file\n";
+	        die "Metagenomics file 2 (raw_seq_data/".$param{'PRJF'}."/".$param{'METF2'}.") does not exist, please check the METF2 parameter in the project definition file\n";
 	    }
-	    if ($param{'HICPRE'} ne 'NONE'){
-	        if (-f "../raw_seq_data/".$param{'PRJF'}."/".$param{'HICPRE'}.".r_1.fq.gz"){
-	            print STDERR "Hi-C file 1 (raw_seq_data/".$param{'PRJF'}."/".$param{'HICPRE'}.".r_1.fq.gz) was found --> VALID\n";
+	    #if ($param{'HICPRE'} ne 'NONE'){
+	        if (-f "../raw_seq_data/".$param{'PRJF'}."/".$param{'HICF1'}){
+	            print STDERR "Hi-C file 1 (raw_seq_data/".$param{'PRJF'}."/".$param{'HICF1'}.") was found --> VALID\n";
 	        }
 	        else{
-	            die "Hi-C file 1 (raw_seq_data/".$param{'PRJF'}."/".$param{'HICPRE'}.".r_1.fq.gz) does not exist, please check the HICPRE parameter in the project definition file\n";
+	            die "Hi-C file 1 (raw_seq_data/".$param{'PRJF'}."/".$param{'HICF1'}.") does not exist, please check the HICPRE parameter in the project definition file\n";
 	        }
-	        if (-f "../raw_seq_data/".$param{'PRJF'}."/".$param{'HICPRE'}.".r_2.fq.gz"){
-	            print STDERR "Hi-C file 2 (raw_seq_data/".$param{'PRJF'}."/".$param{'HICPRE'}.".r_2.fq.gz) was found --> VALID\n";
+	        if (-f "../raw_seq_data/".$param{'PRJF'}."/".$param{'HICF2'}){
+	            print STDERR "Hi-C file 2 (raw_seq_data/".$param{'PRJF'}."/".$param{'HICF2'}.") was found --> VALID\n";
 	        }
 	        else{
-	            die "Hi-C file 2 (raw_seq_data/".$param{'PRJF'}."/".$param{'HICPRE'}.".r_2.fq.gz) does not exist, please check the HICPRE parameter in the project definition file\n";
+	            die "Hi-C file 2 (raw_seq_data/".$param{'PRJF'}."/".$param{'HICF2'}.") does not exist, please check the HICPRE parameter in the project definition file\n";
 	        }
-	    }
+	    #}
 
 	    print STDERR "\n########################################################################################################\n";
 	    print STDERR "#                                                                                                      #\n";
