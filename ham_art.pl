@@ -124,7 +124,7 @@ if ($step eq 'initialise'){
 	        $md5s = `md5sum $fn`;
 	        chomp($md5s);
 	        ($md5, undef) = split(' ', $md5s);
-	        print OUT $param{'PRJID'}."\t".$param{'CRSID'}."\t".$datestr."\tproject_defs/".$fn."\t".$md5."\tinit;\n";
+	        print OUT $param{'PRJID'}."\t".$datestr."\tproject_defs/".$fn."\t".$md5."\tinit;\n";
 	        close(OUT);
 	        print STDERR "\n########################################################################################################\n";
 	        print STDERR "#                                                                                                      #\n";
@@ -2343,11 +2343,11 @@ sub GetPrjDet {
         chomp;
         my @fl = split(/\t/, $_);
         if ($fl[0] eq $id){
-            $prj_fn = $fl[3];
-            my @fl2 = split(/;/, $fl[5]);
-            $retarr{'ALL_STEPS'} = $fl[5];
+            $prj_fn = $fl[2];
+            my @fl2 = split(/;/, $fl[4]);
+            $retarr{'ALL_STEPS'} = $fl[4];
             $retarr{'LAST_STEP'} = shift(@fl2);
-            $retarr{'PRJ_FN'} = $fl[3];
+            $retarr{'PRJ_FN'} = $fl[2];
             $pass = 1;
         }
     }
