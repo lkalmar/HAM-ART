@@ -12,7 +12,7 @@ while(<C>){
 	if(!/^#/){
 		chomp;
 		$_ =~ s/\r$//;
-		($key, $opt, $val) = split(/\t/, $_);
+		($key, $opt, $val) = split(' ', $_);
 		$dep{$key}{'prog'} = $val;
 		$dep{$key}{'opt'} = $opt;
 	}
