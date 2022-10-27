@@ -393,7 +393,7 @@ if ($step eq "post_assembly"){
 		`$runpr $runopt`;
 		#Extracting contacts
 		open(F, "post_assembly/".$prj{'PRJF'}."/".$prj{'PRJID'}."_SEL_sorted.sam");
-		open(O, "post_assembly/".$prj{'PRJF'}."/".$prj{'PRJID'}."_hic_contacts");
+		open(O, ">post_assembly/".$prj{'PRJF'}."/".$prj{'PRJID'}."_hic_contacts");
 		$preid = '';
 		$pass = 0;
 		$cnt = 0;
