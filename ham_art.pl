@@ -992,7 +992,7 @@ if ($step eq 'clade_refinement'){
 	close(OUT);
 
 	print STDERR "Constructing distance tree...\n";
-	$runpr = $path."upgma.jl";
+	$runpr = "julia ".$path."upgma.jl";
 	$runopt = $dist_res;
 	`$runpr $runopt`;
 	$restree = $of."full_combined_tree.txt";
