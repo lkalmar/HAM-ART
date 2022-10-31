@@ -928,7 +928,7 @@ if ($step eq "post_assembly"){
 
 if ($step eq 'clade_refinement'){
 	@prj_ids = parseIDs(shift(@ARGV));
-	%prj = GetPrjDet($prj_id[0]);
+	%prj = GetPrjDet($prj_ids[0]);
 	$prjcat = $prj{'PRJF'};
 
 	$bf = "results/".$prjcat."/";
@@ -1545,7 +1545,7 @@ if ($step eq 'clade_refinement'){
 
 	$fd = $resfd;
 
-	$db = "~/rds/rds-mah1-vet_amr/mah1_scripts/resfinder_blast_db/resfinder.fas";
+	#$db = "~/rds/rds-mah1-vet_amr/mah1_scripts/resfinder_blast_db/resfinder.fas";
 	@colours = ('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#b15928');
 	if ($fd !~ /\/$/){
 		$fd = $fd."/";
