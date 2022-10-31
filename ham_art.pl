@@ -851,7 +851,7 @@ if ($step eq "post_assembly"){
 		                            open (TMF, ">".$tm_contig);
 		                            print TMF ">".$id."\n".$allseq{$id}."\n";
 		                            close(TMF);
-		                            $runpr = $dep{'BLASTN'}{'prog'}."-db $temp_fasta -query $tm_contig -perc_identity 85 -outfmt '6 qacc sacc length qlen qstart qend' -culling_limit 1";
+		                            $runpr = $dep{'BLASTN'}{'prog'}." -db $temp_fasta -query $tm_contig -perc_identity 85 -outfmt '6 qacc sacc length qlen qstart qend' -culling_limit 1";
 		                            @res = `$runpr`;
 		                            chomp(@res);
 		                            $mstr = '0' x $lens{$id};
