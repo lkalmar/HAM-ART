@@ -1023,18 +1023,18 @@ if ($step eq 'clade_refinement'){
 
 	# clade refinement 1
 	#($name) = $folder =~ /\/combined_results_(.+)\//;
-	$file = $of."clade_text_annotation.txt";
+	#$file = $of."clade_text_annotation.txt";
 	# Create blast databases from contigs fasta
-	%plist = ();
-	open(F, $file);
-	while(<F>){
-		if (/^CC/){
-			@fl = split(/\t/, $_);
-			@fl1 = split('_', $fl[0]);
-			$plist{pop(@fl1)} = 1;
-		}
-	}
-	close(F);
+	#%plist = ();
+	#open(F, $file);
+	#while(<F>){
+	#	if (/^CC/){
+	#		@fl = split(/\t/, $_);
+	#		@fl1 = split('_', $fl[0]);
+	#		$plist{pop(@fl1)} = 1;
+	#	}
+	#}
+	#close(F);
 	@arr = `grep \"^CC_\" $file | grep -v \"SMALL\" | cut -f 2 | sort | uniq -c | sort -gr | awk \'\$1 > 2\' | awk \'{print \$2}\'`;
 	chomp(@arr);
 
@@ -1063,15 +1063,15 @@ if ($step eq 'clade_refinement'){
 	open(F, $fd."clade_text_annotation.txt");
 	while(<F>){
 		if (/^CC/){
-			if (/^CC_\d+_s\d_\w\d+/){
-				($prjid) = $_ =~ /CC_\d+_s\d_(\w\d+)\s/;
+			if (/^CC_\d+_s\d_.+/){
+				($prjid) = $_ =~ /CC_\d+_s\d_(.+)\s/;
 				$preg{$prjid} = 1;
 				@fl = split(/\t/, $_);
 				push(@{$clades{$fl[1]}}, $fl[0]);
 				$cc_data{$fl[0]}{'clade'} = $fl[1];
 			}
 			else{
-				($prjid) = $_ =~ /CC_\d+_(\w\d+)\s/;
+				($prjid) = $_ =~ /CC_\d+_(.+)\s/;
 				$preg{$prjid} = 1;
 				@fl = split(/\t/, $_);
 				push(@{$clades{$fl[1]}}, $fl[0]);
@@ -1087,12 +1087,13 @@ if ($step eq 'clade_refinement'){
 		if (exists($target{$cl})){
 			@akt_arr = @{$clades{$cl}};
 			print STDERR "Finding exampler in clade ".$cl." and do BLAST search in other projects...\n";
-			$res = `perl_scripts/post_pipeline/find_clade_best.pl $fd $prj_name $cl`;
+			#$res = `perl_scripts/post_pipeline/find_clade_best.pl $fd $prj_name $cl`;
 			
 			$folder = $fd;
 			$prj_name = $prjcat;
 			$clade = $cl;
 			open(F, $folder."clade_text_annotation.txt");
+			@ccs = ();
 			while(<F>){
 				if (/$clade/ && /^CC/ && !/SMALL/){
 					($cc, undef) = split(/\t/, $_);
@@ -1102,9 +1103,10 @@ if ($step eq 'clade_refinement'){
 			close(F);
 
 			if (scalar(@ccs) <= 2 ){
-				print "not_enough_CCs";
-				die $clade." has less than 2 members, choosing example is not reliable!\n";
+				print STDERR "not_enough_CCs";
+				print STDERR $clade." has less than 2 members, choosing example is not reliable!\n";
 			}
+			else{
 			@lens = ();
 			$gtdbtkroot = $folder."temporary_gtdbtk_folders/".$clade;
 			if (!-d $gtdbtkroot){
@@ -1125,11 +1127,11 @@ if ($step eq 'clade_refinement'){
 			print STDERR "Copying files into a temporary folder to perform GTDBtk analysis on them...\n";
 			for $cc_fid (@ccs){
 				if ($cc_fid =~ /_s\d_/){
-					(undef, $cc_tmpid, $sub, $sid) = split(/_/, $cc_fid);
+					($cc_tmpid, $sub, $sid) = $cc_fid =~ /CC_(\d+)_(s\d)_(.+)\s/;
 					$cc_id = $cc_tmpid."_".$sub;
 				}
 				else{
-					(undef, $cc_id, $sid) = split(/_/, $cc_fid);
+					($cc_id, $sid) = $cc_fid =~ /CC_(\d+)_(.+)\s/;
 				}
 				$from = "results/".$prj_name."/".$sid."_clusters/CC_".$cc_id.".mfa";
 				$to = $gtdbtkfd.$cc_fid.".mfa";
@@ -1166,11 +1168,11 @@ if ($step eq 'clade_refinement'){
 			chomp(@bacmiss);
 			@armiss = `cut -f 4 $armarkerfile`;
 			chomp(@armiss);
-			if (average(@bacmiss) == 120 && average(@bacmiss) == 122){
+			if (mean(@bacmiss) == 120 && mean(@armiss) == 122){
 				#No markers were found
-				print "No markers were found, potentially no bacterial or archeal assembly!";
+				print STDERR "No markers were found, potentially no bacterial or archeal assembly!";
 			}
-			if ((120-average(@bacmiss))/120 > (122-average(@armiss))/122){
+			if ((120-mean(@bacmiss))/120 > (122-mean(@armiss))/122){
 				#Mostly bacterial genomes
 				@res = `cut -f 1-3 $bacmarkerfile | grep \"^CC\" | sort -grk2 | head`;
 				print STDERR "Found mostly bacterial markers...\n";
@@ -1202,11 +1204,11 @@ if ($step eq 'clade_refinement'){
 			$res = $best;
 			if ($res =~ /^CC/){
 				if ($res =~ /_s\d_/){ # Changed from /_s\d_/
-					(undef, $tmpcid, $sub, $pid) = split(/_/, $res);
+					($tmpcid, $sub, $pid) = $res =~ /CC_(\d+)_(s\d)_(.+)\s/;
 					$cid = $tmpcid."_".$sub;
 				}
 				else{
-					(undef, $cid, $pid) = split(/_/, $res);
+					($cid, $pid) = $res =~ /CC_(\d+)_(.+)\s/;
 				}
 				$cc_path = "results/".$prj_name."/".$pid."_clusters/CC_".$cid.".mfa";
 				#Use the core of the example for blast (the collection of the longest contigs that take up the 90% of the whole nucleotide content)
@@ -1291,6 +1293,7 @@ if ($step eq 'clade_refinement'){
 				}
 			}
 			print $cl." -> ".$res."\t(".scalar(@{$clades{$cl}}).")\n";
+			}
 		}
 	}
 	print STDERR "Finished with BLAST search...\n";
