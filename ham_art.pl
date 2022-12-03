@@ -1064,14 +1064,14 @@ if ($step eq 'clade_refinement'){
 	while(<F>){
 		if (/^CC/){
 			if (/^CC_\d+_s\d_.+/){
-				($prjid) = $_ =~ /CC_\d+_s\d_(.+)\s/;
+				($prjid) = $_ =~ /CC_\d+_s\d_(\S+)\s/;
 				$preg{$prjid} = 1;
 				@fl = split(/\t/, $_);
 				push(@{$clades{$fl[1]}}, $fl[0]);
 				$cc_data{$fl[0]}{'clade'} = $fl[1];
 			}
 			else{
-				($prjid) = $_ =~ /CC_\d+_(.+)\s/;
+				($prjid) = $_ =~ /CC_\d+_(\S+)\s/;
 				$preg{$prjid} = 1;
 				@fl = split(/\t/, $_);
 				push(@{$clades{$fl[1]}}, $fl[0]);
