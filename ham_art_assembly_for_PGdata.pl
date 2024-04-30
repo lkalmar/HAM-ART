@@ -53,35 +53,35 @@ if ($step eq "assembly"){
 		            $id = $_;
 		        }
 		        if ($fc == 2){ #seq line
-                #print $_."\n";
-                $cntr++;
-                @hits = $_ =~ /(GATCGATC|GATCAATT|AATTGATC|AATTAATT)/g;
-                if (scalar(@hits) == 0){
-                     if ($fend =~ /notCombined/){
-                        $tosel = 1;
-                        @seqs = ($_);
-                        $cnt0++;
+                    #print $_."\n";
+                    $cntr++;
+                    @hits = $_ =~ /(GATCGATC|GATCAATT|AATTGATC|AATTAATT)/g;
+                    if (scalar(@hits) == 0){
+                        if ($fend =~ /notCombined/){
+                            $tosel = 1;
+                            @seqs = ($_);
+                            $cnt0++;
+                        }
+                        if ($fend =~ /extendedFrags/){
+                            $exclude = 1;
+                            @seqs = ($_);
+                            $cntex++;
+                        }
                     }
-                    if ($fend =~ /extendedFrags/){
-                        $exclude = 1;
-                        @seqs = ($_);
-                        $cntex++;
+                    if (scalar(@hits) == 1){
+                        $tosel = 2;
+                        ($ligsite1, $ligsite2) = $hits[0] =~ /(....)(....)/;
+                        @seqs = $_ =~ /(.*$ligsite1)($ligsite2.*)/;
+                        $cnt1++;
+                    }
+                    if (scalar(@hits) == 2){
+                        $tosel = 3;
+                        ($ligsite1, $ligsite2) = $hits[0] =~ /(....)(....)/;
+                        ($ligsite3, $ligsite4) = $hits[1] =~ /(....)(....)/;
+                        @seqs = $_ =~ /(.*$ligsite1)($ligsite2.*$ligsite3)($ligsite4.*)/;
+                        $cnt2++;
                     }
                 }
-                if (scalar(@hits) == 1){
-                    $tosel = 2;
-                    ($ligsite1, $ligsite2) = $hits[0] =~ /(....)(....)/;
-                    @seqs = $_ =~ /(.*$ligsite1)($ligsite2.*)/;
-                    $cnt1++;
-                }
-                if (scalar(@hits) == 2){
-                    $tosel = 3;
-                    ($ligsite1, $ligsite2) = $hits[0] =~ /(....)(....)/;
-                    ($ligsite3, $ligsite4) = $hits[1] =~ /(....)(....)/;
-                    @seqs = $_ =~ /(.*$ligsite1)($ligsite2.*$ligsite3)($ligsite4.*)/;
-                    $cnt2++;
-                }
-            }
 		        if ($fc == 4){
 		            $qual = $_;
 		            if ($exclude == 0){
